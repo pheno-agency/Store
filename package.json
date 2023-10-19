@@ -21,10 +21,14 @@
     "lint": "eslint \"src/**/*.ts*\"",
     "preview": "qwik build preview && vite preview --open",
     "start": "vite --open --mode ssr",
-    "qwik": "qwik"
+    "qwik": "qwik",
+    "push": "drizzle-kit push:pg",
+    "migrate": "drizzle-kit generate:pg"
   },
   "devDependencies": {
+    "@auth/core": "^0.13.0",
     "@builder.io/qwik": "^1.2.13",
+    "@builder.io/qwik-auth": "0.1.1",
     "@builder.io/qwik-city": "^1.2.13",
     "@types/eslint": "8.44.1",
     "@types/node": "^20.4.5",
@@ -40,8 +44,13 @@
     "vite-tsconfig-paths": "4.2.0"
   },
   "dependencies": {
+    "@modular-forms/qwik": "^0.21.0",
+    "@neondatabase/serverless": "^0.6.0",
     "@unpic/qwik": "^0.0.27",
+    "dotenv": "^16.3.1",
     "drizzle-orm": "^0.28.6",
+    "pg": "^8.11.3",
+    "postgres": "^3.4.0",
     "unocss": "^0.56.5"
   }
 }

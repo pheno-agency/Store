@@ -1,3 +1,12 @@
-import { defineConfig } from "unocss";
+import {
+  defineConfig,
+  transformerDirectives,
+  transformerVariantGroup,
+} from "unocss";
 
-export default defineConfig({});
+export default defineConfig({
+  content: {
+    filesystem: ["src/**/*.{ts,tsx}"],
+  },
+  transformers: [transformerDirectives(), transformerVariantGroup()],
+});
