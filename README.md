@@ -5,7 +5,7 @@
 - [ ] Product Card
 - [ ] create neon db
 - [ ] plugin@auth (login/signup/logout)
-- [ ] verify email (this may not work because of edge, nodemailer)
+- [ ] verify email (this may not work because of edge, nodemailer);
 - [ ] User schema
 - [ ] Product schema
 - [ ] Get all products
