@@ -25,17 +25,18 @@ const Signin = component$(() => {
     url.searchParams.delete("sign-in");
     window.history.replaceState({}, document.title, url.pathname);
   });
-    const signin = useAuthSignin();
+  const signin = useAuthSignin();
   const [, { Form, Field }] = useForm<LoginForm>({
     loader: { value: { email: "", password: "" } },
     validate: zodForm$(signinSchema),
   });
 
-  const submitHandler: QRL<SubmitHandler<LoginForm>> = $(async (credentials) =>
+  const submitHandler: QRL<SubmitHandler<LoginForm>> = $(
+    async (credentials) =>
       await signin.submit({
         providerId: "credentials",
         options: { callbackUrl: "/", ...credentials },
-      })
+      }),
   );
 
   const showPassword = useSignal(false);

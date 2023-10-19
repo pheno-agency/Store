@@ -31,11 +31,12 @@ const Signup = component$(() => {
     validate: zodForm$(signupSchema),
   });
 
-  const submitHandler: QRL<SubmitHandler<LoginForm>> = $(async (credentials) =>
-    await signin.submit({
-      providerId: "credentials",
-      options: { callbackUrl: "/", ...credentials },
-    })
+  const submitHandler: QRL<SubmitHandler<LoginForm>> = $(
+    async (credentials) =>
+      await signin.submit({
+        providerId: "credentials",
+        options: { callbackUrl: "/", ...credentials },
+      }),
   );
 
   const showPassword = useSignal(false);
@@ -176,8 +177,9 @@ const Signup = component$(() => {
         {/* submit button */}
         <button
           type="submit"
-          class={`${submitButtonBaseStyle} ${isActiveSubmitButton.value ? "opacity-50" : "opacity-100"
-            }`}
+          class={`${submitButtonBaseStyle} ${
+            isActiveSubmitButton.value ? "opacity-50" : "opacity-100"
+          }`}
           disabled={isActiveSubmitButton.value}
         >
           Sign up
