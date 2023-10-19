@@ -1,8 +1,12 @@
 import { $, component$, useSignal } from "@builder.io/qwik";
-import { type DocumentHead } from "@builder.io/qwik-city";
+import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import { userListings } from "~/utils/constants";
 import CreateListing from "~/components/listing/CreateListing";
 import CreateProduct from "~/components/listing/CreateProduct";
+import { getUserListings } from "~/services/listing";
+export const useGetUserListings = routeLoader$(async () => {
+  return getUserListings();
+});
 
 export default component$(() => {
   const isOpen = useSignal(false);

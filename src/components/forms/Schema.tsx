@@ -26,3 +26,15 @@ export const signupSchema = z.object({
     required_error: "You must be agree with terms!",
   }),
 });
+
+export const productSchema = z.object({
+  title: z.string(),
+  price: z.number(),
+  description: z.string(),
+  cover: z.string(),
+  listingId: z.number(),
+});
+
+export const listingSchema = z.object({
+  title: z.string(),
+});
