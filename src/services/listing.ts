@@ -5,6 +5,7 @@ import { listing } from "~/db/schema/listing";
 import { product } from "~/db/schema/product";
 import { createClient } from "~/db/schema/utils";
 import { getSession } from "~/routes/plugin@auth";
+import { deleteListingSchema, deleteProductSchema } from "~/utils/schema";
 
 // TODO: get listingProduct
 
@@ -201,15 +202,26 @@ export const updateProductDescription = server$(async function (
     .execute();
 });
 
-export const deleteProduct = server$(async function (id: number) {
-  const { db } = await createClient(this);
-  const session = getSession(this);
+export const useDeleteProduct = globalAction$(async function (data, req) {
+  const { db } = await createClient(req);
+  const session = getSession(req);
   if (!session) {
     console.log("ERROR");
   }
   await db
     .delete(product)
-    .where(and(eq(product.id, id), eq(product.author, session!.user.id)))
-    .returning()
-    .execute();
-});
+    .where(and(eq(product.id, data.id), eq(product.author, session!.user.id)));
+}, zod$(deleteProductSchema));
+
+export const useDeleteListing = globalAction$(async function (data, req) {
+  const { db } = await createClient(req);
+  const session = getSession(req);
+  if (!session) {
+    console.log("ERROR");
+  }
+  await db
+    .delete(listing)
+    .where(
+      and(eq(listing.id, data.id), eq(listing.authorId, session!.user.id)),
+    );
+}, zod$(deleteListingSchema));

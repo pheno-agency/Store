@@ -1,26 +1,24 @@
 import { $, component$, useSignal } from "@builder.io/qwik";
-import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
+import {
+  routeLoader$,
+  type DocumentHead,
+  useNavigate,
+} from "@builder.io/qwik-city";
 import CreateListing from "~/components/listing/CreateListing";
 import CreateProduct from "~/components/listing/CreateProduct";
 import EditableProduct from "~/components/listing/EditableProduct";
 import { getUserListings } from "~/services/listing";
+import { useDeleteListing } from "~/services/listing";
 export const useGetUserListings = routeLoader$(async (req) => {
   return getUserListings.apply(req);
 });
 
 export default component$(() => {
+  const deleteListing = useDeleteListing();
   const userListings = useGetUserListings();
-  // console.log('first',userListings.value[0].products)
   const isOpen = useSignal(false);
   const createProduct = useSignal(false);
-  // const isAuthorized = useAuthSession();
-  // const nav = useNavigate()
-  // useTask$(async({track}) => {
-  //   track(() => isAuthorized.value);
-  //   if (!isAuthorized.value?.user) {
-  //     await nav('/')
-  //   }
-  // })
+  const nav = useNavigate();
 
   const Inputs = useSignal({
     listNameInput: "",
@@ -30,10 +28,6 @@ export default component$(() => {
   const nameHandler = $((e: { target: HTMLInputElement }) => {
     Inputs.value.listNameInput = (e.target as HTMLInputElement).value;
   });
-  // const DeleteListingHandler = $((id: number) => {
-  //   listingsData.value = listingsData.value.filter((i) => i.id !== id);
-  // });
-
   return (
     <div class="flex flex-wrap justify-center items-center gap-4 p-20px mx-auto w-full">
       <button
@@ -65,9 +59,14 @@ export default component$(() => {
               </div>
               <div>
                 <button>save list</button>
-                {/* <button onClick$={() => DeleteListingHandler(listing.id)}>
+                <button
+                  onClick$={async () => {
+                    await deleteListing.submit({ id: listing.id });
+                    await nav();
+                  }}
+                >
                   delete list
-                </button> */}
+                </button>
               </div>
             </div>
             <div class="flex justify-start items-center flex-wrap gap-6 min-h-60 ">

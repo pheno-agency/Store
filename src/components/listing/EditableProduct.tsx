@@ -5,7 +5,7 @@ import { type z } from "@builder.io/qwik-city";
 import coverImg from "../../media/cover-img.png";
 import { Image } from "@unpic/qwik";
 import {
-  deleteProduct,
+  useDeleteProduct,
   updateProductDescription,
   updateProductPrice,
   updateProductTitle,
@@ -19,6 +19,7 @@ interface EditableProductProps {
 }
 const EditableProduct = component$(
   ({ title, description, price, productId }: EditableProductProps) => {
+    const deleteProduct = useDeleteProduct();
     type productInfo = z.infer<typeof productSchema>;
     const [, { Form, Field }] = useForm<productInfo>({
       loader: {
@@ -37,13 +38,6 @@ const EditableProduct = component$(
         await updateProductDescription(productId, values.description);
       },
     );
-    const deleteProductHandler = $(async (id: number) => {
-      try {
-        await deleteProduct(id);
-      } catch (e) {
-        console.log("error on delete:", e);
-      }
-    });
     return (
       <Form
         onSubmit$={updateProductHandler}
@@ -112,7 +106,7 @@ const EditableProduct = component$(
         </div>
         <div class="flex justify-center items-center gap-2">
           <button type="submit">edit</button>
-          <button onClick$={() => deleteProductHandler(productId)}>
+          <button onClick$={() => deleteProduct.submit({ id: productId })}>
             delete
           </button>
         </div>

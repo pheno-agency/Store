@@ -7,6 +7,9 @@ import UnoCSS from "unocss/vite";
 export default defineConfig(() => {
   return {
     plugins: [qwikCity(), qwikVite(), tsconfigPaths(), UnoCSS()],
+    optimizeDeps: {
+      include: ["@auth/core"],
+    },
     preview: {
       headers: {
         "Cache-Control": "public, max-age=600",
