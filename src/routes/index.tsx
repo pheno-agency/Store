@@ -25,7 +25,7 @@ export default component$(() => {
 
       <div class="container container-flex">
         <Infobox>
-          <div q:slot="title" class="icon icon-cli">
+          <div q: slot="title" class="icon icon-cli">
             CLI Commands
           </div>
           <>
@@ -54,7 +54,7 @@ export default component$(() => {
 
         <div>
           <Infobox>
-            <div q:slot="title" class="icon icon-apps">
+            <div q: slot="title" class="icon icon-apps">
               Example Apps
             </div>
             <p>
@@ -64,7 +64,7 @@ export default component$(() => {
           </Infobox>
 
           <Infobox>
-            <div q:slot="title" class="icon icon-community">
+            <div q: slot="title" class="icon icon-community">
               Community
             </div>
             <ul>
