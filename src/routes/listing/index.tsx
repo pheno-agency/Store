@@ -1,6 +1,7 @@
 import { component$ } from "@builder.io/qwik";
-import type { DocumentHead } from "@builder.io/qwik-city";
+import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import ProductCard from "~/components/cards/ProductCard";
+import { getUserListings } from "~/services/listing";
 const listingItem = [
   {
     id: 1,
@@ -33,6 +34,11 @@ const listingItem = [
     price: "1000",
   },
 ];
+
+export const useGetUserListings = routeLoader$(async () => {
+  return getUserListings();
+});
+
 export default component$(() => {
   return (
     <div class="flex flex-wrap justify-center items-center gap-4 p-20px mx-auto w-full">

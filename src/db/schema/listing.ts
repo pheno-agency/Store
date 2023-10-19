@@ -8,13 +8,13 @@ export const listing = pgTable(
   {
     id: serial("id").primaryKey(),
     title: text("title").notNull(),
-    authorId: integer("author-id"),
+    authorId: integer("author-id").notNull(),
   },
   (table) => {
     return {
       titleIdx: index("title_idx").on(table.title),
     };
-  },
+  }
 );
 
 export const listingRelation = relations(listing, ({ one, many }) => ({
