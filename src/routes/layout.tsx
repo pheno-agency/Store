@@ -6,6 +6,12 @@ import Header from "~/components/starter/header/header";
 import Footer from "~/components/starter/footer/footer";
 
 import styles from "./styles.css?inline";
+import { createClient } from "~/db/schema/utils";
+
+export const onRequest: RequestHandler = (req) => {
+  // create client from the first request, so we don't wait for it later
+  createClient(req);
+};
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
   // Control caching for this request for best performance and to reduce hosting costs:
