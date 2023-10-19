@@ -19,7 +19,7 @@ const ProductCard = component$<ProductProps>(
             src={coverImg}
             width={30}
             height={30}
-            alt={name}
+            alt={title}
             class="w-100% h-100px mx-auto"
           />
         ) : (
@@ -27,7 +27,7 @@ const ProductCard = component$<ProductProps>(
             src={cover}
             width={30}
             height={30}
-            alt={name}
+            alt={title}
             class="w-100% h-100px mx-auto"
           />
         )}

@@ -1,14 +1,16 @@
 import { $, component$, useSignal } from "@builder.io/qwik";
 import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
-import { userListings } from "~/utils/constants";
 import CreateListing from "~/components/listing/CreateListing";
 import CreateProduct from "~/components/listing/CreateProduct";
+import EditableProduct from "~/components/listing/EditableProduct";
 import { getUserListings } from "~/services/listing";
 export const useGetUserListings = routeLoader$(async (req) => {
   return getUserListings.apply(req);
 });
 
 export default component$(() => {
+  const userListings = useGetUserListings();
+  // console.log('first',userListings.value[0].products)
   const isOpen = useSignal(false);
   const createProduct = useSignal(false);
   // const isAuthorized = useAuthSession();
@@ -25,13 +27,12 @@ export default component$(() => {
     productName: "",
     description: "",
   });
-  const listingsData = useSignal(userListings);
   const nameHandler = $((e: { target: HTMLInputElement }) => {
     Inputs.value.listNameInput = (e.target as HTMLInputElement).value;
   });
-  const DeleteListingHandler = $((id: number) => {
-    listingsData.value = listingsData.value.filter((i) => i.id !== id);
-  });
+  // const DeleteListingHandler = $((id: number) => {
+  //   listingsData.value = listingsData.value.filter((i) => i.id !== id);
+  // });
 
   return (
     <div class="flex flex-wrap justify-center items-center gap-4 p-20px mx-auto w-full">
@@ -44,7 +45,7 @@ export default component$(() => {
         {isOpen.value ? "Cancel" : "New list"}
       </button>
       {isOpen.value ? <CreateListing /> : null}
-      {listingsData.value.map((listing) => {
+      {userListings.value?.map((listing) => {
         return (
           <div
             key={listing.id}
@@ -64,9 +65,9 @@ export default component$(() => {
               </div>
               <div>
                 <button>save list</button>
-                <button onClick$={() => DeleteListingHandler(listing.id)}>
+                {/* <button onClick$={() => DeleteListingHandler(listing.id)}>
                   delete list
-                </button>
+                </button> */}
               </div>
             </div>
             <div class="flex justify-start items-center flex-wrap gap-6 min-h-60 ">
@@ -78,14 +79,15 @@ export default component$(() => {
               >
                 add new product
               </button>
-              {createProduct.value ? <CreateProduct /> : null}
+              {createProduct.value ? <CreateProduct id={listing.id} /> : null}
               {listing.products.map((product) => {
                 return (
-                  <CreateProduct
+                  <EditableProduct
                     key={product.id}
                     title={product.title}
                     price={product.price}
-                    description={product.description}
+                    description={product.description ?? ""}
+                    productId={product.id}
                   />
                 );
               })}

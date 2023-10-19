@@ -34,10 +34,10 @@ export const getUserListings = server$(async function () {
   }
 
   try {
-    const userListings = await db
-      .select()
-      .from(listing)
-      .where(eq(listing.authorId, session.user.id));
+    const userListings = await db.query.listing.findMany({
+      where: eq(listing.authorId, session.user.id),
+      with: { products: true },
+    });
     return userListings;
   } catch {
     // return serverError(this, "Getting data faild", 500);
@@ -116,7 +116,7 @@ export const useCreateProduct = globalAction$(async (data, req) => {
           price: data.price,
           description: data.description,
           author: session?.user.id,
-          cover: data.cover,
+          // cover: data.cover,
           listingId: data.listingId, // NOT CORRECT!!
         })
         .returning()
@@ -181,6 +181,25 @@ export const updateProductPrice = server$(async function (
     .where(eq(product.author, session!.user.id))
     .execute();
 });
+export const updateProductDescription = server$(async function (
+  id: number,
+  newDescription: string,
+) {
+  const { db } = await createClient(this);
+
+  const session = getSession(this);
+  if (!session) {
+    //   return serverError(this, "Anonymous creation is not implemented yet", 403);
+    console.log("Error");
+  }
+
+  await db
+    .update(product)
+    .set({ description: newDescription })
+    .where(eq(product.id, id))
+    .where(eq(product.author, session!.user.id))
+    .execute();
+});
 
 export const deleteProduct = server$(async function (id: number) {
   const { db } = await createClient(this);
@@ -190,5 +209,7 @@ export const deleteProduct = server$(async function (id: number) {
   }
   await db
     .delete(product)
-    .where(and(eq(product.id, id), eq(product.author, session!.user.id)));
+    .where(and(eq(product.id, id), eq(product.author, session!.user.id)))
+    .returning()
+    .execute();
 });

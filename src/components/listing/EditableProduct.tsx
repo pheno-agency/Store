@@ -4,16 +4,21 @@ import { productSchema } from "./schema";
 import { type z } from "@builder.io/qwik-city";
 import coverImg from "../../media/cover-img.png";
 import { Image } from "@unpic/qwik";
-import { useCreateProduct } from "../../services/listing";
+import {
+  deleteProduct,
+  updateProductDescription,
+  updateProductPrice,
+  updateProductTitle,
+} from "../../services/listing";
 
-interface CreateProductProps {
+interface EditableProductProps {
   title?: string;
   description?: string;
   price?: number;
-  id: number;
+  productId: number;
 }
-const CreateProduct = component$(
-  ({ title, description, price, id }: CreateProductProps) => {
+const EditableProduct = component$(
+  ({ title, description, price, productId }: EditableProductProps) => {
     type productInfo = z.infer<typeof productSchema>;
     const [, { Form, Field }] = useForm<productInfo>({
       loader: {
@@ -25,21 +30,23 @@ const CreateProduct = component$(
       },
       validate: zodForm$(productSchema),
     });
-    const createProduct = useCreateProduct();
-    const createProductHandler: QRL<SubmitHandler<productInfo>> = $(
+    const updateProductHandler: QRL<SubmitHandler<productInfo>> = $(
       async (values) => {
-        await createProduct.submit({
-          title: values.title,
-          price: values.price,
-          description: values.description,
-          cover: "",
-          listingId: id,
-        });
+        await updateProductTitle(productId, values.title);
+        await updateProductPrice(productId, values.price);
+        await updateProductDescription(productId, values.description);
       },
     );
+    const deleteProductHandler = $(async (id: number) => {
+      try {
+        await deleteProduct(id);
+      } catch (e) {
+        console.log("error on delete:", e);
+      }
+    });
     return (
       <Form
-        onSubmit$={createProductHandler}
+        onSubmit$={updateProductHandler}
         class="w-170px h-260px border border-solid rounded-8px flex flex-col justify-center items-center gap-1"
       >
         <Image
@@ -104,10 +111,13 @@ const CreateProduct = component$(
           </Field>
         </div>
         <div class="flex justify-center items-center gap-2">
-          <button type="submit">create</button>
+          <button type="submit">edit</button>
+          <button onClick$={() => deleteProductHandler(productId)}>
+            delete
+          </button>
         </div>
       </Form>
     );
   },
 );
-export default CreateProduct;
+export default EditableProduct;

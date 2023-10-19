@@ -17,17 +17,6 @@ const CreateListing = component$(() => {
   const createListingHandler: QRL<SubmitHandler<ListingInfo>> = $(
     async (values) => {
       await createListing.submit(values);
-
-      // listingsData.value = [
-      //   ...listingsData.value,
-      //   {
-      //     id: listingsData.value.length + 1, // Generate a unique ID for the new list
-      //     name: values.title, // Set the name to the input value
-      //     products: [],
-      //   },
-      // ];
-
-      console.log(values);
     },
   );
   return (

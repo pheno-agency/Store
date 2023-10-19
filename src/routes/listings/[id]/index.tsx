@@ -9,9 +9,8 @@ export const useListingProducts = routeLoader$((req) => {
 
 export default component$(() => {
   const listingProducts = useListingProducts();
-  console.log("first", listingProducts.value);
-  return (
-    <div>
+  return listingProducts.value!.length > 0 ? (
+    <div class="flex justify-start items-start gap-7 flex-wrap border border-solid rounded-4 p-2">
       {listingProducts.value?.map((product) => {
         return (
           <ProductCard
@@ -22,6 +21,9 @@ export default component$(() => {
           />
         );
       })}
+      <button class="self-end ml-auto mr-4">add to cart</button>
     </div>
+  ) : (
+    <p class="text-20px w-full text-center">this listing has no product yet</p>
   );
 });
