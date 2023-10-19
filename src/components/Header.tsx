@@ -25,7 +25,7 @@ const header = component$(() => {
       <div class="flex gap-2 justify-center items-center">
         {isAuthorized.value?.user ? (
           <>
-            <a href="/listing">
+            <a href="/listings">
               <Image src={PlusIcon} alt="cart icon" width={20} height={20} />
             </a>
             {location.url.pathname === "/cart/" ? (

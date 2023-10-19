@@ -5,13 +5,13 @@ import coverImg from "../../media/cover-img.png";
 
 interface ProductProps {
   cover?: string;
-  name: string;
+  title: string;
   description?: string;
-  price: string;
+  price: number;
 }
 
 const ProductCard = component$<ProductProps>(
-  ({ cover, name, description, price }) => {
+  ({ cover, title, description, price }) => {
     return (
       <div class="flex flex-col items-center w-170px h-260px border border-solid rounded-8px p-10px bg-white">
         {!cover ? (
@@ -32,7 +32,7 @@ const ProductCard = component$<ProductProps>(
           />
         )}
         <div class="flex justify-between items-center w-full ">
-          <p class="text-20px text-black">{name}</p>
+          <p class="text-20px text-black">{title}</p>
           <p class="text-20px text-black">${price}</p>
         </div>
         <p class="text-16px text-black w-100% h-100% my-0">{description}</p>

@@ -10,11 +10,11 @@ import { getSession } from "~/routes/plugin@auth";
 
 export const getListings = server$(async function () {
   const { db } = await createClient(this);
-  const session = getSession(this);
-  if (!session) {
-    // return serverError(this, "error", 403);
-    return [];
-  }
+  // const session = getSession(this);
+  // if (!session) {
+  //   // return serverError(this, "error", 403);
+  //   return [];
+  // }
 
   try {
     const listings = await db.select().from(listing);
@@ -45,19 +45,14 @@ export const getUserListings = server$(async function () {
   }
 });
 
-export const getListingProducts = server$(async function () {
+export const getListingProducts = server$(async function (id: number) {
   const { db } = await createClient(this);
-  const session = getSession(this);
-  if (!session) {
-    // return serverError(this, "error", 403);
-    return [];
-  }
 
   try {
     const listingProducts = await db
       .select()
       .from(product)
-      .where(eq(product.listingId, listing.id));
+      .where(eq(product.listingId, id));
     return listingProducts;
   } catch {
     // return serverError(this, "Getting data faild", 500);
@@ -74,7 +69,7 @@ export const useCreateListing = globalAction$(async (data, req) => {
     console.error("ERROR");
   }
   try {
-    let list = (
+    const list = (
       await db
         .insert(listing)
         .values({
@@ -113,7 +108,7 @@ export const useCreateProduct = globalAction$(async (data, req) => {
     console.error("ERROR");
   }
   try {
-    let item = (
+    const item = (
       await db
         .insert(product)
         .values({

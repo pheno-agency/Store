@@ -4,8 +4,8 @@ import { userListings } from "~/utils/constants";
 import CreateListing from "~/components/listing/CreateListing";
 import CreateProduct from "~/components/listing/CreateProduct";
 import { getUserListings } from "~/services/listing";
-export const useGetUserListings = routeLoader$(async () => {
-  return getUserListings();
+export const useGetUserListings = routeLoader$(async (req) => {
+  return getUserListings.apply(req);
 });
 
 export default component$(() => {
