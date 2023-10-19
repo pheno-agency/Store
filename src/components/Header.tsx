@@ -3,6 +3,7 @@ import { Image } from "@unpic/qwik";
 import CartIcon from "~/media/icons/cart-icon.svg";
 import BackIcon from "~/media/icons/undo-icon.svg";
 import UserIcon from "~/media/icons/user-icon.svg";
+import PlusIcon from "~/media/icons/plus-icon.svg";
 import { useLocation } from "@builder.io/qwik-city";
 import { useAuthSession, useAuthSignout } from "~/routes/plugin@auth";
 
@@ -24,6 +25,9 @@ const header = component$(() => {
       <div class="flex gap-2 justify-center items-center">
         {isAuthorized.value?.user ? (
           <>
+            <a href="/listing">
+              <Image src={PlusIcon} alt="cart icon" width={20} height={20} />
+            </a>
             {location.url.pathname === "/cart/" ? (
               <p class=" text-blue-900 flex justify-center items-center text-18px rounded-full">
                 you add 10 product
@@ -39,6 +43,7 @@ const header = component$(() => {
                 <Image src={CartIcon} alt="cart icon" width={20} height={20} />
               </a>
             )}
+
             <button
               onClick$={() => signout.submit({})}
               class="w-20 h-8 !bg-gradient-to-r !from-#1E18CF !from-50% !to-#625DDD !to-100% !text-#fff border-none rounded-2 text-3 font-normal unselectable cursor-pointer"

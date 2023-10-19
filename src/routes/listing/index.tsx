@@ -1,44 +1,95 @@
-import { component$ } from "@builder.io/qwik";
+import { $, component$, useSignal, useTask$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
+import { userListings } from "~/utils/constants";
 import ProductCard from "~/components/cards/ProductCard";
-const listingItem = [
-  {
-    id: 1,
-    title: "sdgsdfg",
-    price: "1000",
-  },
-  {
-    id: 2,
-    title: "sdgsdfg",
-    price: "1000",
-  },
-  {
-    id: 3,
-    title: "sdgsdfg",
-    price: "1000",
-  },
-  {
-    id: 4,
-    title: "sdgsdfg",
-    price: "1000",
-  },
-  {
-    id: 5,
-    title: "sdgsdfg",
-    price: "1000",
-  },
-  {
-    id: 6,
-    title: "sdgsdfg",
-    price: "1000",
-  },
-];
+
 export default component$(() => {
+  const isOpen = useSignal(false);
+  const listingsData = useSignal(userListings);
+
+  const DeleteListingHandler = $((id: number) => {
+    listingsData.value = listingsData.value.filter((i) => i.id !== id);
+  });
+  const SaveListing = $(() => {
+    listingsData.value = [
+      ...listingsData.value,
+      {
+        id: 3,
+        name: "test",
+        products: [],
+      },
+    ];
+  });
+  useTask$(({ track }) => {
+    track(() => listingsData.value);
+  });
   return (
     <div class="flex flex-wrap justify-center items-center gap-4 p-20px mx-auto w-full">
-      {listingItem.map((item) => {
+      <button
+        class="w-20 h-8 !bg-gradient-to-r !from-#1E18CF !from-50% !to-#625DDD !to-100% !text-#fff border-none rounded-2 text-3 font-normal unselectable cursor-pointer"
+        onClick$={() => {
+          isOpen.value = !isOpen.value;
+        }}
+      >
+        {isOpen.value ? "Cancel" : "New list"}
+      </button>
+      {isOpen.value ? (
+        <div class="flex flex-col justify-start items-start gap-4 w-full p-4 rounded-2 border border-solid ">
+          <div class="flex justify-between items-start w-full">
+            <div class="flex flex-col justify-start items-start gap-2">
+              <label for="list">List name</label>
+              <input type="text" name="list" id="list" class="h-8 rounded-2" />
+            </div>
+            <button onClick$={() => SaveListing()}>save list</button>
+          </div>
+          <div class="flex justify-start items-center flex-wrap gap-9 min-h-60 ">
+            <button class="w-170px h-260px border border-solid rounded-8px flex justify-center items-center">
+              add new product
+            </button>
+            {/* all  list products */}
+            {}
+          </div>
+        </div>
+      ) : null}
+      {listingsData.value.map((listing) => {
         return (
-          <ProductCard key={item.id} name={item.title} price={item.price} />
+          <div
+            key={listing.id}
+            class="flex flex-col justify-start items-start gap-4 w-full p-4 rounded-2 border border-solid "
+          >
+            <div class="flex justify-between items-start w-full">
+              <div class="flex flex-col justify-start items-start gap-2">
+                <label for="list">List name</label>
+                <input
+                  type="text"
+                  name="list"
+                  id="list"
+                  class="h-8 rounded-2"
+                  value={listing.name}
+                />
+              </div>
+              <div>
+                <button>save list</button>
+                <button onClick$={() => DeleteListingHandler(listing.id)}>
+                  delete list
+                </button>
+              </div>
+            </div>
+            <div class="flex justify-start items-center flex-wrap gap-6 min-h-60 ">
+              <button class="w-170px h-260px border border-solid rounded-8px flex justify-center items-center">
+                add new product
+              </button>
+              {listing.products.map((product) => {
+                return (
+                  <ProductCard
+                    key={product.id}
+                    name={product.name}
+                    price={product.price}
+                  />
+                );
+              })}
+            </div>
+          </div>
         );
       })}
     </div>
