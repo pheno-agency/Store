@@ -1,27 +1,66 @@
-import { $, component$, useSignal, useTask$ } from "@builder.io/qwik";
+import { $, component$, useSignal } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { userListings } from "~/utils/constants";
 import ProductCard from "~/components/cards/ProductCard";
+import { Image } from "@unpic/qwik";
+import coverImg from "../../media/cover-img.png";
 
 export default component$(() => {
   const isOpen = useSignal(false);
-  const listingsData = useSignal(userListings);
+  const createProduct = useSignal(false);
 
+  const Inputs = useSignal({
+    listNameInput: "",
+    productName: "",
+    description: "",
+  });
+  const listingsData = useSignal(userListings);
+  const nameHandler = $((e: { target: HTMLInputElement }) => {
+    Inputs.value.listNameInput = (e.target as HTMLInputElement).value;
+  });
   const DeleteListingHandler = $((id: number) => {
     listingsData.value = listingsData.value.filter((i) => i.id !== id);
   });
   const SaveListing = $(() => {
-    listingsData.value = [
-      ...listingsData.value,
-      {
-        id: 3,
-        name: "test",
-        products: [],
-      },
-    ];
+    // const newProduct = {
+    //   name: Inputs.value.productName,
+    //   description: Inputs.value.description,
+    //   price: ''
+    //   // image: Inputs.value,
+    // };
+    const newListName = Inputs.value.listNameInput; // Get the input value
+    if (newListName) {
+      // Check if the input has a value
+      listingsData.value = [
+        ...listingsData.value,
+        {
+          id: listingsData.value.length + 1, // Generate a unique ID for the new list
+          name: newListName, // Set the name to the input value
+          products: [],
+        },
+      ];
+
+      // Clear the input value
+      Inputs.value.listNameInput = "";
+    }
   });
-  useTask$(({ track }) => {
-    track(() => listingsData.value);
+  const saveProduct = $(() => {
+    // const newProduct = {
+    //   name: Inputs.value.productName,
+    //   description: Inputs.value.description,
+    //   price: "",
+    //   // image: Inputs.value,
+    // };
+
+    // Check if the input has a value
+    // listingsData.value = [
+    //   ...listingsData.value,
+    //   {
+    //     id: listingsData.value.length + 1, // Generate a unique ID for the new list
+    //     name: newListName, // Set the name to the input value
+    //     products: [],
+    //   },
+    // ];
   });
   return (
     <div class="flex flex-wrap justify-center items-center gap-4 p-20px mx-auto w-full">
@@ -47,7 +86,7 @@ export default component$(() => {
               add new product
             </button>
             {/* all  list products */}
-            {}
+            { }
           </div>
         </div>
       ) : null}
@@ -61,6 +100,7 @@ export default component$(() => {
               <div class="flex flex-col justify-start items-start gap-2">
                 <label for="list">List name</label>
                 <input
+                  onChange$={nameHandler}
                   type="text"
                   name="list"
                   id="list"
@@ -76,9 +116,61 @@ export default component$(() => {
               </div>
             </div>
             <div class="flex justify-start items-center flex-wrap gap-6 min-h-60 ">
-              <button class="w-170px h-260px border border-solid rounded-8px flex justify-center items-center">
+              <button
+                onClick$={() => {
+                  createProduct.value = !createProduct.value;
+                }}
+                class="w-170px h-260px border border-solid rounded-8px flex justify-center items-center"
+              >
                 add new product
               </button>
+              {createProduct.value ? (
+                <div class="w-170px h-260px border border-solid rounded-8px flex flex-col justify-center items-center">
+                  <Image
+                    src={coverImg}
+                    width={30}
+                    height={30}
+                    // alt={name}
+                    class="w-100% h-100px mx-auto"
+                  />
+                  <div class="flex flex-col justify-between items-center w-full ">
+                    <div class="flex flex-col justify-start items-start gap-2 w-full">
+                      <label for="productName">Product name</label>
+                      <input
+                        onChange$={nameHandler}
+                        type="text"
+                        name="productName"
+                        id="productName"
+                        class="h-6 rounded-2 w-full"
+                      // value={listing.name}
+                      />
+                    </div>
+                    <div class="flex flex-col justify-start items-start gap-2 w-full">
+                      <label for="productPrice">Product price</label>
+                      <input
+                        onChange$={nameHandler}
+                        type="number"
+                        name="productPrice"
+                        id="productPrice"
+                        class="h-6 rounded-2 w-full"
+                      // value={listin}
+                      />
+                    </div>
+                    <div class="flex flex-col justify-start items-start gap-2 w-full">
+                      <label for="productDis">Product price</label>
+                      <textarea
+                        // onChange$={nameHandler}
+                        name="productPrice"
+                        id="productPrice"
+                        class="rounded-2 w-full"
+                      // value={listin}
+                      />
+                    </div>
+                    {/* <input class="text-20px text-black w-full" /> */}
+                  </div>
+                  <button onClick$={saveProduct}>save</button>
+                </div>
+              ) : null}
               {listing.products.map((product) => {
                 return (
                   <ProductCard
