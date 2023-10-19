@@ -13,7 +13,7 @@ import { signinSchema } from "./Schema";
 import VisibleIcon from "~/media/icons/eye-on.svg";
 import InVisibleIcon from "~/media/icons/eye-off.svg";
 import EmailIcon from "~/media/icons/email.svg";
-// import { useAuthSignin } from "~/routes/plugin@auth";
+import { useAuthSignin } from "~/routes/plugin@auth";
 
 type LoginForm = z.infer<typeof signinSchema>;
 
@@ -25,18 +25,17 @@ const Signin = component$(() => {
     url.searchParams.delete("sign-in");
     window.history.replaceState({}, document.title, url.pathname);
   });
-  //   const signin = useAuthSignin();
+    const signin = useAuthSignin();
   const [, { Form, Field }] = useForm<LoginForm>({
     loader: { value: { email: "", password: "" } },
     validate: zodForm$(signinSchema),
   });
 
   const submitHandler: QRL<SubmitHandler<LoginForm>> = $(async (credentials) =>
-    //   await signin.submit({
-    //     providerId: "credentials",
-    //     options: { callbackUrl: "/", ...credentials },
-    //   })
-    console.log("SignIn", credentials),
+      await signin.submit({
+        providerId: "credentials",
+        options: { callbackUrl: "/", ...credentials },
+      })
   );
 
   const showPassword = useSignal(false);

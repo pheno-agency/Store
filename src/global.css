@@ -46,3 +46,6 @@ body {
   box-sizing: border-box;
   font-weight: 600;
 }
+a:visited {
+  color: inherit;
+}

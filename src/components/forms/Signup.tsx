@@ -13,7 +13,7 @@ import { signupSchema } from "./Schema";
 import EmailIcon from "~/media/icons/email.svg";
 import InVisibleIcon from "~/media/icons/eye-off.svg";
 import VisibleIcon from "~/media/icons/eye-on.svg";
-// import { useAuthSignin } from "~/routes/plugin@auth";
+import { useAuthSignin } from "~/routes/plugin@auth";
 
 type LoginForm = z.infer<typeof signupSchema>;
 const Signup = component$(() => {
@@ -25,18 +25,17 @@ const Signup = component$(() => {
     url.searchParams.delete("sign-up");
     window.history.replaceState({}, document.title, url.pathname);
   });
-  //   const signin = useAuthSignin();
+  const signin = useAuthSignin();
   const [, { Form, Field }] = useForm<LoginForm>({
     loader: { value: { name: "", email: "", password: "", terms: false } },
     validate: zodForm$(signupSchema),
   });
 
   const submitHandler: QRL<SubmitHandler<LoginForm>> = $(async (credentials) =>
-    //   await signin.submit({
-    //     providerId: "credentials",
-    //     options: { callbackUrl: "/dashboard", ...credentials },
-    //   })
-    console.log("SignUp", credentials),
+    await signin.submit({
+      providerId: "credentials",
+      options: { callbackUrl: "/", ...credentials },
+    })
   );
 
   const showPassword = useSignal(false);
@@ -67,7 +66,7 @@ const Signup = component$(() => {
             />
             {field.error ? (
               <Error>
-                <p q:slot="errorText">{field.error}</p>
+                <p q: slot="errorText">{field.error}</p>
               </Error>
             ) : null}
           </div>
@@ -95,7 +94,7 @@ const Signup = component$(() => {
             </div>
             {field.error ? (
               <Error>
-                <p q:slot="errorText">{field.error}</p>
+                <p q: slot="errorText">{field.error}</p>
               </Error>
             ) : null}
           </div>
@@ -137,7 +136,7 @@ const Signup = component$(() => {
             </div>
             {field.error ? (
               <Error>
-                <p q:slot="errorText">{field.error}</p>
+                <p q: slot="errorText">{field.error}</p>
               </Error>
             ) : null}
           </div>
@@ -162,12 +161,12 @@ const Signup = component$(() => {
               </div>
               {field.error && (
                 <Error>
-                  <p q:slot="errorText">{field.error}</p>
+                  <p q: slot="errorText">{field.error}</p>
                 </Error>
               )}
               {!field.error && serverErrorMessage && (
                 <Error>
-                  <p q:slot="errorText">{serverErrorMessage}</p>
+                  <p q: slot="errorText">{serverErrorMessage}</p>
                 </Error>
               )}
             </div>
@@ -177,9 +176,8 @@ const Signup = component$(() => {
         {/* submit button */}
         <button
           type="submit"
-          class={`${submitButtonBaseStyle} ${
-            isActiveSubmitButton.value ? "opacity-50" : "opacity-100"
-          }`}
+          class={`${submitButtonBaseStyle} ${isActiveSubmitButton.value ? "opacity-50" : "opacity-100"
+            }`}
           disabled={isActiveSubmitButton.value}
         >
           Sign up
