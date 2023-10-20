@@ -24,7 +24,7 @@ export default component$(() => {
   const deleteListing = useDeleteListing();
   const userListings = useGetUserListings();
   const isOpen = useSignal(false);
-  const createProduct = useSignal(0);
+  const currentOpenListing = useSignal<null | number>(null);
   const nav = useNavigate();
 
   type ListingInfo = z.infer<typeof listingSchema>;
@@ -92,14 +92,17 @@ export default component$(() => {
             <div class="flex justify-start items-center flex-wrap gap-6 min-h-60 ">
               <button
                 onClick$={() => {
-                  createProduct.value = listing.id;
+                  currentOpenListing.value = listing.id;
                 }}
                 class="w-170px h-260px border border-solid rounded-8px flex justify-center items-center"
               >
                 add new product
               </button>
-              {createProduct.value === listing.id ? (
-                <CreateProduct id={listing.id} />
+              {currentOpenListing.value === listing.id ? (
+                <CreateProduct
+                  id={listing.id}
+                  currentOpenListing={currentOpenListing}
+                />
               ) : null}
               {listing.products.map((product) => {
                 return (

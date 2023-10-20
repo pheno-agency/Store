@@ -1,11 +1,5 @@
 import { relations } from "drizzle-orm";
-import {
-  integer,
-  pgTable,
-  serial,
-  text,
-  timestamp,
-} from "drizzle-orm/pg-core";
+import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 import { listing } from "./listing";
 
 export const product = pgTable("product", {

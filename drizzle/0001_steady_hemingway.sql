@@ -1,1 +1,0 @@
-ALTER TABLE "listing" ALTER COLUMN "author-id" SET NOT NULL;

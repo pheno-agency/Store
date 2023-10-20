@@ -1,7 +1,8 @@
 import { component$ } from "@builder.io/qwik";
 import { routeLoader$, useLocation } from "@builder.io/qwik-city";
 import ProductCard from "~/components/cards/ProductCard";
-import { getListingProducts, useAddToCart } from "~/services/listing";
+import { getListingProducts } from "~/services/listing";
+import { useAddToCart } from "~/services/cart";
 
 export const useListingProducts = routeLoader$((req) => {
   return getListingProducts(Number(req.params.id));

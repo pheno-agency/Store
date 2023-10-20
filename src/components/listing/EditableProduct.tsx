@@ -4,7 +4,7 @@ import { productSchema } from "./schema";
 import { type z } from "@builder.io/qwik-city";
 import coverImg from "../../media/cover-img.png";
 import { Image } from "@unpic/qwik";
-import { useDeleteProduct, useUpdateProduct } from "../../services/listing";
+import { useDeleteProduct, useUpdateProduct } from "../../services/product";
 
 interface EditableProductProps {
   title?: string;
@@ -89,7 +89,7 @@ const EditableProduct = component$(
             {(field, props) => (
               <div class="flex flex-col justify-start items-start w-full">
                 <label for="productDis" class="text-10px">
-                  Product price
+                  Product description
                 </label>
                 <textarea
                   {...props}

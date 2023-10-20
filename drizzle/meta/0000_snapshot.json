@@ -1,9 +1,51 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "70860240-9630-4243-a29f-b956c82b8f9b",
+  "id": "02884e63-edd4-40b6-83b8-e57c40c37ece",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
+    "cart_item": {
+      "name": "cart_item",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "author_id": {
+          "name": "author_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "listing_id": {
+          "name": "listing_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "listing": {
       "name": "listing",
       "schema": "",
@@ -20,11 +62,11 @@
           "primaryKey": false,
           "notNull": true
         },
-        "author-id": {
-          "name": "author-id",
+        "author_id": {
+          "name": "author_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {
@@ -66,11 +108,11 @@
           "primaryKey": false,
           "notNull": false
         },
-        "author": {
-          "name": "author",
+        "author_id": {
+          "name": "author_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "cover": {
           "name": "cover",
@@ -78,8 +120,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "listing-id": {
-          "name": "listing-id",
+        "listing_id": {
+          "name": "listing_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -99,13 +141,7 @@
           "default": "now()"
         }
       },
-      "indexes": {
-        "title_idx": {
-          "name": "title_idx",
-          "columns": ["title"],
-          "isUnique": false
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}

@@ -28,22 +28,12 @@ const header = component$(() => {
             <a href="/listings">
               <Image src={PlusIcon} alt="cart icon" width={20} height={20} />
             </a>
-            {location.url.pathname === "/cart/" ? (
-              <p class=" text-blue-900 flex justify-center items-center text-18px rounded-full">
-                you add 10 product
-              </p>
-            ) : (
-              <a
-                href="/cart"
-                class="relative h-full flex justify-center items-center mr-2"
-              >
-                <p class="absolute -top-2 -right-3 w-20px h-20px bg-red-500 text-white flex justify-center items-center text-14px rounded-full mt-0 ">
-                  10
-                </p>
-                <Image src={CartIcon} alt="cart icon" width={20} height={20} />
-              </a>
-            )}
-
+            <a
+              href="/cart"
+              class="relative h-full flex justify-center items-center mr-2"
+            >
+              <Image src={CartIcon} alt="cart icon" width={20} height={20} />
+            </a>
             <button
               onClick$={() => signout.submit({})}
               class="w-20 h-8 !bg-gradient-to-r !from-#1E18CF !from-50% !to-#625DDD !to-100% !text-#fff border-none rounded-2 text-3 font-normal unselectable cursor-pointer"

@@ -1,26 +1,25 @@
+import type { Signal } from "@builder.io/qwik";
 import { $, type QRL, component$ } from "@builder.io/qwik";
 import { type SubmitHandler, useForm, zodForm$ } from "@modular-forms/qwik";
 import { productSchema } from "./schema";
 import { type z } from "@builder.io/qwik-city";
 import coverImg from "../../media/cover-img.png";
 import { Image } from "@unpic/qwik";
-import { useCreateProduct } from "../../services/listing";
+import { useCreateProduct } from "../../services/product";
 
 interface CreateProductProps {
-  title?: string;
-  description?: string;
-  price?: number;
   id: number;
+  currentOpenListing: Signal<number | null>;
 }
 const CreateProduct = component$(
-  ({ title, description, price, id }: CreateProductProps) => {
+  ({ id, currentOpenListing }: CreateProductProps) => {
     type productInfo = z.infer<typeof productSchema>;
     const [, { Form, Field }] = useForm<productInfo>({
       loader: {
         value: {
-          title: title ?? "",
-          description: description ?? "",
-          price: price ?? 0,
+          title: "",
+          description: "",
+          price: 0,
         },
       },
       validate: zodForm$(productSchema),
@@ -35,7 +34,8 @@ const CreateProduct = component$(
           cover: "",
           listingId: id,
         });
-      },
+        currentOpenListing.value = null;
+      }
     );
     return (
       <Form
@@ -46,7 +46,6 @@ const CreateProduct = component$(
           src={coverImg}
           width={30}
           height={30}
-          // alt={name}
           class="w-100% h-100px mx-auto"
         />
         <div class="flex flex-col justify-between items-center w-full ">
@@ -89,7 +88,7 @@ const CreateProduct = component$(
             {(field, props) => (
               <div class="flex flex-col justify-start items-start w-full">
                 <label for="productDis" class="text-10px">
-                  Product price
+                  Product description
                 </label>
                 <textarea
                   {...props}
@@ -108,6 +107,6 @@ const CreateProduct = component$(
         </div>
       </Form>
     );
-  },
+  }
 );
 export default CreateProduct;

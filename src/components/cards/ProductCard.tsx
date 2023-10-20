@@ -6,7 +6,7 @@ import coverImg from "../../media/cover-img.png";
 interface ProductProps {
   cover?: string;
   title: string;
-  description?: string;
+  description?: string | null;
   price: number;
 }
 
