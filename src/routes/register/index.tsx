@@ -4,12 +4,12 @@ import Signin from "~/components/forms/Signin";
 import Signup from "~/components/forms/Signup";
 
 export default component$(() => {
-  const changeForm = useSignal(true);
+  const isSignup = useSignal(true);
   const changeFormToSignin = $(() => {
-    changeForm.value = true;
+    isSignup.value = true;
   });
   const changeFormToSignup = $(() => {
-    changeForm.value = false;
+    isSignup.value = false;
   });
   const formTypeButtons =
     "w-50% h-100% border-none text-2.5 font-medium text-black no-underline bg-transparent cursor-pointer z-2";
@@ -20,7 +20,7 @@ export default component$(() => {
       <div class="relative flex items-center justify-around w-44 h-8 bg-#fff rounded-2 border-1 border-solid border-#E0E0E2 cursor-pointer">
         <div
           class={`absolute w-50% h-100% bg-#f4f4f4 duration-500 ${
-            changeForm.value
+            isSignup.value
               ? "left-0 rounded-l-2 border-r-1"
               : "left-50% rounded-r-2 border-l-1"
           }`}
@@ -33,9 +33,9 @@ export default component$(() => {
         </button>
       </div>
 
-      {changeForm.value ? <Signin /> : <Signup />}
+      {isSignup.value ? <Signin /> : <Signup />}
 
-      {changeForm.value ? (
+      {isSignup.value ? (
         <p class="text-#8C8C8C text-2.5">
           Don't have an account?{" "}
           <button

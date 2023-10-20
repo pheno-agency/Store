@@ -35,7 +35,7 @@ const CreateProduct = component$(
           listingId: id,
         });
         currentOpenListing.value = null;
-      }
+      },
     );
     return (
       <Form
@@ -107,6 +107,6 @@ const CreateProduct = component$(
         </div>
       </Form>
     );
-  }
+  },
 );
 export default CreateProduct;

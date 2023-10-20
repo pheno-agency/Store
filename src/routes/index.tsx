@@ -10,8 +10,8 @@ export default component$(() => {
 
   return (
     <div class="flex flex-wrap justify-center items-center gap-4 p-20px mx-auto w-full">
-      {listings.value?.map((el, i) => {
-        return <ListingCard key={i} title={el.title} id={el.id} />;
+      {listings.value?.map((listing, i) => {
+        return <ListingCard key={i} title={listing.title} id={listing.id} />;
       })}
     </div>
   );

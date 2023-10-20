@@ -55,7 +55,7 @@ export const useUpdateProduct = globalAction$(async function (data, req) {
       description: data.description,
     })
     .where(
-      and(eq(product.id, data.id), eq(product.authorId, session!.user.id))
+      and(eq(product.id, data.id), eq(product.authorId, session!.user.id)),
     );
 }, zod$(updateProductSchema));
 

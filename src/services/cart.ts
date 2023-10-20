@@ -16,7 +16,7 @@ export const useAddToCart = globalAction$(async function (data, req) {
     .findFirst({
       where: and(
         eq(cartItem.authorId, session.user.id),
-        eq(cartItem.listingId, data.listingId)
+        eq(cartItem.listingId, data.listingId),
       ),
     })
     .execute());

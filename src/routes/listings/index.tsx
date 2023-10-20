@@ -81,7 +81,7 @@ export default component$(() => {
                   <button
                     onClick$={async () => {
                       await deleteListing.submit({ id: listing.id });
-                      await nav();
+                      nav();
                     }}
                   >
                     delete list
