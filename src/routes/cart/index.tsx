@@ -15,7 +15,7 @@ export default component$(() => {
           title: listing.title,
           products: await getListingProducts(listing.id),
         }))
-        .filter(async (p) => Boolean(await p)) ?? []
+        .filter(async (p) => Boolean(await p)) ?? [],
     );
   });
 
@@ -53,7 +53,7 @@ export default component$(() => {
                     .flatMap((l) => l.products)
                     .reduce(
                       (total, product) => total + (product?.price ?? 0),
-                      0
+                      0,
                     )
                     .toFixed(3)}
                 </p>

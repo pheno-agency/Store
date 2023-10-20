@@ -10,7 +10,7 @@
 - [x] Product schema
 - [x] Get all products
 - [x] create listing
-- [x] update listing 
+- [x] update listing
 - [x] create product
 - [x] update product (price, quantity)
 - [x] remove product

@@ -12,7 +12,7 @@ export default component$(() => {
   const listingProducts = useListingProducts();
   const location = useLocation();
   const addToCart = useAddToCart();
-  return listingProducts.value?.length! > 0 ? (
+  return !listingProducts.value?.length ? (
     <div class="flex justify-start items-start gap-7 flex-wrap border border-solid rounded-4 p-2">
       {listingProducts.value?.map((product) => {
         return (
