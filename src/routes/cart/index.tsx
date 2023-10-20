@@ -8,7 +8,7 @@ export const useGetUserCartItem = routeLoader$((req) => {
 });
 export default component$(() => {
   const userCartItems = useGetUserCartItem();
-  const listingProductsResource = useResource$(() => {
+  const listingsResource = useResource$(() => {
     return Promise.all(
       userCartItems.value
         ?.map(async ({ listing }) => ({
@@ -22,12 +22,12 @@ export default component$(() => {
   return (
     <div class="flex flex-col items-center justify-between">
       <Resource
-        value={listingProductsResource}
+        value={listingsResource}
         onPending={() => <p>loading...</p>}
-        onResolved={(listingProducts) =>
-          listingProducts.length > 0 ? (
+        onResolved={(listings) =>
+          listings.length > 0 ? (
             <>
-              {listingProducts.map((listing) => (
+              {listings.map((listing) => (
                 <div
                   key={listing.title}
                   class="flex flex-wrap justify-center items-center gap-4 p-20px mx-auto w-full"
@@ -49,7 +49,7 @@ export default component$(() => {
               <div class="flex justify-between items-center w-full">
                 <p class="text-20px text-black">
                   Subtotal : $
-                  {listingProducts
+                  {listings
                     .flatMap((l) => l.products)
                     .reduce(
                       (total, product) => total + (product?.price ?? 0),
