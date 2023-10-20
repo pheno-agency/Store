@@ -1,15 +1,9 @@
-import {
-  component$,
-  Slot,
-  useContextProvider,
-  useSignal,
-} from "@builder.io/qwik";
+import { component$, Slot } from "@builder.io/qwik";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import type { RequestHandler } from "@builder.io/qwik-city";
 import Header from "~/components/Header";
 import Footer from "~/components/Footer";
 import { createClient } from "~/db/schema/utils";
-import { cartContext } from "~/store/cartStore";
 
 export const onRequest: RequestHandler = (req) => {
   // create client from the first request, so we don't wait for it later
@@ -34,8 +28,6 @@ export const useServerTimeLoader = routeLoader$(() => {
 });
 
 export default component$(() => {
-  const cart = useSignal<string[]>([]);
-  useContextProvider(cartContext, cart);
   return (
     <>
       <Header />

@@ -1,10 +1,8 @@
 import { component$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
-// import { cartContext } from "~/store/cartStore";
 import { userListings } from "../../utils/constants";
 import ProductCard from "~/components/cards/ProductCard";
 export default component$(() => {
-  // const cartData = useContext(cartContext);
   return (
     <div class="flex flex-col items-center justify-between">
       {userListings[0].products.length > 0 ? (

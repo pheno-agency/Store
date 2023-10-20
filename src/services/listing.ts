@@ -6,7 +6,8 @@ import { product } from "~/db/schema/product";
 import { createClient } from "~/db/schema/utils";
 import { getSession } from "~/routes/plugin@auth";
 import {
-  updateProductAndListingSchema,
+  updateProductSchema,
+  updateListingSchema,
   deleteProductAndListingSchema,
 } from "~/utils/schema";
 
@@ -151,19 +152,21 @@ export const useUpdateListing = globalAction$(async function (data, req) {
   const { db } = await createClient(req);
   const session = getSession(req);
   if (!session) {
-    console.log("Error occured");
+    console.log("Error occurred");
   }
   await db
-    .update(product)
+    .update(listing)
     .set({ title: data.title })
-    .where(and(eq(product.id, data.id), eq(product.author, session!.user.id)));
-}, zod$(updateProductAndListingSchema));
+    .where(
+      and(eq(listing.id, data.id), eq(listing.authorId, session!.user.id)),
+    );
+}, zod$(updateListingSchema));
 
 export const useUpdateProduct = globalAction$(async function (data, req) {
   const { db } = await createClient(req);
   const session = getSession(req);
   if (!session) {
-    console.log("Error occured");
+    console.log("Error occurred");
   }
   await db
     .update(product)
@@ -173,7 +176,7 @@ export const useUpdateProduct = globalAction$(async function (data, req) {
       description: data.description,
     })
     .where(and(eq(product.id, data.id), eq(product.author, session!.user.id)));
-}, zod$(updateProductAndListingSchema));
+}, zod$(updateProductSchema));
 
 // Delete queries
 export const useDeleteProduct = globalAction$(async function (data, req) {
