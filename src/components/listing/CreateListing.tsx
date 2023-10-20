@@ -1,5 +1,5 @@
-import { $, type QRL, component$ } from "@builder.io/qwik";
-import { type SubmitHandler, useForm, zodForm$ } from "@modular-forms/qwik";
+import { component$ } from "@builder.io/qwik";
+import { useForm, zodForm$ } from "@modular-forms/qwik";
 import { listingSchema } from "./schema";
 import { type z } from "@builder.io/qwik-city";
 import { useCreateListing } from "../../services/listing";
@@ -14,14 +14,9 @@ const CreateListing = component$(() => {
     validate: zodForm$(listingSchema),
   });
   const createListing = useCreateListing();
-  const createListingHandler: QRL<SubmitHandler<ListingInfo>> = $(
-    async (values) => {
-      await createListing.submit(values);
-    },
-  );
   return (
     <Form
-      onSubmit$={createListingHandler}
+      onSubmit$={(values) => createListing.submit(values)}
       class="flex justify-between items-start w-full w-full p-4 rounded-2 border border-solid"
     >
       ADD NEW LIST
