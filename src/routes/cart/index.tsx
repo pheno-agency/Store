@@ -1,8 +1,14 @@
 import { component$ } from "@builder.io/qwik";
-import type { DocumentHead } from "@builder.io/qwik-city";
+import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import { userListings } from "../../utils/constants";
 import ProductCard from "~/components/cards/ProductCard";
+import { getUserCartItems } from "../../services/listing";
+export const useGetUserCartItem = routeLoader$((req) => {
+  return getUserCartItems.apply(req);
+});
 export default component$(() => {
+  // const userCartItems = useGetUserCartItem()
+
   return (
     <div class="flex flex-col items-center justify-between">
       {userListings[0].products.length > 0 ? (

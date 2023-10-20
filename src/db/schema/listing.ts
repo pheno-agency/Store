@@ -8,7 +8,7 @@ export const listing = pgTable(
   {
     id: serial("id").primaryKey(),
     title: text("title").notNull(),
-    authorId: integer("author-id").notNull(),
+    authorId: integer("author_id").notNull(),
   },
   (table) => {
     return {

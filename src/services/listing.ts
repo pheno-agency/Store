@@ -1,6 +1,7 @@
 import { globalAction$, server$, zod$ } from "@builder.io/qwik-city";
 import { and, eq } from "drizzle-orm";
 import { listingSchema, productSchema } from "~/components/forms/Schema";
+import { cartItem } from "~/db/schema/cartItem";
 import { listing } from "~/db/schema/listing";
 import { product } from "~/db/schema/product";
 import { createClient } from "~/db/schema/utils";
@@ -9,6 +10,7 @@ import {
   updateProductSchema,
   updateListingSchema,
   deleteProductAndListingSchema,
+  addToCartSchema,
 } from "~/utils/schema";
 
 // TODO: get listingProduct
@@ -120,7 +122,7 @@ export const useCreateProduct = globalAction$(async (data, req) => {
           title: data.title,
           price: data.price,
           description: data.description,
-          author: session?.user.id,
+          authorId: session?.user.id!,
           // cover: data.cover,
           listingId: data.listingId, // NOT CORRECT!!
         })
@@ -175,7 +177,9 @@ export const useUpdateProduct = globalAction$(async function (data, req) {
       price: data.price,
       description: data.description,
     })
-    .where(and(eq(product.id, data.id), eq(product.author, session!.user.id)));
+    .where(
+      and(eq(product.id, data.id), eq(product.authorId, session!.user.id)),
+    );
 }, zod$(updateProductSchema));
 
 // Delete queries
@@ -187,7 +191,9 @@ export const useDeleteProduct = globalAction$(async function (data, req) {
   }
   await db
     .delete(product)
-    .where(and(eq(product.id, data.id), eq(product.author, session!.user.id)));
+    .where(
+      and(eq(product.id, data.id), eq(product.authorId, session!.user.id)),
+    );
 }, zod$(deleteProductAndListingSchema));
 
 export const useDeleteListing = globalAction$(async function (data, req) {
@@ -202,3 +208,34 @@ export const useDeleteListing = globalAction$(async function (data, req) {
       and(eq(listing.id, data.id), eq(listing.authorId, session!.user.id)),
     );
 }, zod$(deleteProductAndListingSchema));
+
+export const useAddToCart = globalAction$(async function (data, req) {
+  const { db } = await createClient(req);
+  const session = getSession(req);
+  if (!session) {
+    console.log("Error occurred");
+  }
+  await db
+    .insert(cartItem)
+    .values({
+      authorId: session?.user.id!,
+      listingId: data.listingId,
+    })
+    .execute();
+}, zod$(addToCartSchema));
+
+export const getUserCartItems = server$(async function () {
+  const { db } = await createClient(this);
+  const session = getSession(this);
+  if (!session) {
+    console.log("Error occurred");
+  }
+  return await db.query.cartItem
+    .findMany({
+      with: {
+        listing: true,
+      },
+      where: eq(cartItem.authorId, session?.user.id!),
+    })
+    .execute();
+});

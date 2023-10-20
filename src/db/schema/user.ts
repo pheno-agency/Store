@@ -9,6 +9,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { listing } from "./listing";
+import { cartItem } from "./cartItem";
 
 export const user = pgTable(
   "user",
@@ -30,4 +31,5 @@ export const user = pgTable(
 
 export const userRelation = relations(user, ({ many }) => ({
   listings: many(listing),
+  cartItems: many(cartItem),
 }));

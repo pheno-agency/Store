@@ -12,3 +12,6 @@ export const updateListingSchema = z.object({
   id: z.number(),
   title: z.string(),
 });
+export const addToCartSchema = z.object({
+  listingId: z.number(),
+});

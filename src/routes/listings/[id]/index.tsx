@@ -1,7 +1,7 @@
 import { component$ } from "@builder.io/qwik";
-import { routeLoader$ } from "@builder.io/qwik-city";
+import { routeLoader$, useLocation } from "@builder.io/qwik-city";
 import ProductCard from "~/components/cards/ProductCard";
-import { getListingProducts } from "~/services/listing";
+import { getListingProducts, useAddToCart } from "~/services/listing";
 
 export const useListingProducts = routeLoader$((req) => {
   return getListingProducts(Number(req.params.id));
@@ -9,6 +9,8 @@ export const useListingProducts = routeLoader$((req) => {
 
 export default component$(() => {
   const listingProducts = useListingProducts();
+  const location = useLocation();
+  const addToCart = useAddToCart();
   return listingProducts.value!.length > 0 ? (
     <div class="flex justify-start items-start gap-7 flex-wrap border border-solid rounded-4 p-2">
       {listingProducts.value?.map((product) => {
@@ -21,7 +23,14 @@ export default component$(() => {
           />
         );
       })}
-      <button class="self-end ml-auto mr-4">add to cart</button>
+      <button
+        onClick$={() =>
+          addToCart.submit({ listingId: Number(location.params.id) })
+        }
+        class="self-end ml-auto mr-4"
+      >
+        add to cart
+      </button>
     </div>
   ) : (
     <p class="text-20px w-full text-center">this listing has no product yet</p>

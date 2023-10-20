@@ -1,28 +1,23 @@
 import { relations } from "drizzle-orm";
-import {
-  integer,
-  pgTable,
-  serial,
-  text,
-  timestamp,
-} from "drizzle-orm/pg-core";
+import { integer, pgTable, serial, timestamp } from "drizzle-orm/pg-core";
 import { listing } from "./listing";
+import { user } from "./user";
 
-export const product = pgTable("product", {
+export const cartItem = pgTable("cart_item", {
   id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  price: integer("price").notNull(),
-  description: text("description"),
   authorId: integer("author_id").notNull(),
-  cover: text("cover"),
   listingId: integer("listing_id").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-export const productRelation = relations(product, ({ one }) => ({
+export const cartItemRelation = relations(cartItem, ({ one }) => ({
   listing: one(listing, {
-    fields: [product.listingId],
+    fields: [cartItem.listingId],
     references: [listing.id],
+  }),
+  author: one(user, {
+    fields: [cartItem.authorId],
+    references: [user.id],
   }),
 }));

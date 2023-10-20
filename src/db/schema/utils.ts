@@ -6,6 +6,7 @@ import type { RequestEventBase } from "@builder.io/qwik-city";
 import * as productSchema from "./product";
 import * as userSchema from "./user";
 import * as listingSchema from "./listing";
+import * as cartItemSchema from "./cartItem";
 
 export function getDbUrl(req: RequestEventBase) {
   const [PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID] = [
@@ -24,6 +25,7 @@ const schemas = {
   ...productSchema,
   ...userSchema,
   ...listingSchema,
+  ...cartItemSchema,
 };
 
 let cached: Promise<{
