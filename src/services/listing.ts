@@ -5,7 +5,10 @@ import { listing } from "~/db/schema/listing";
 import { product } from "~/db/schema/product";
 import { createClient } from "~/db/schema/utils";
 import { getSession } from "~/routes/plugin@auth";
-import { deleteListingSchema, deleteProductSchema } from "~/utils/schema";
+import {
+  updateProductAndListingSchema,
+  deleteProductAndListingSchema,
+} from "~/utils/schema";
 
 // TODO: get listingProduct
 
@@ -143,65 +146,36 @@ export const useCreateProduct = globalAction$(async (data, req) => {
   }
 }, zod$(productSchema));
 
-export const updateProductTitle = server$(async function (
-  id: number,
-  newTitle: string,
-) {
-  const { db } = await createClient(this);
-
-  const session = getSession(this);
+// Update queries
+export const useUpdateListing = globalAction$(async function (data, req) {
+  const { db } = await createClient(req);
+  const session = getSession(req);
   if (!session) {
-    //   return serverError(this, "error", 403);
-    console.log("Error");
+    console.log("Error occured");
   }
-
   await db
     .update(product)
-    .set({ title: newTitle })
-    .where(eq(product.id, id))
-    .where(eq(product.author, session!.user.id))
-    .execute();
-});
+    .set({ title: data.title })
+    .where(and(eq(product.id, data.id), eq(product.author, session!.user.id)));
+}, zod$(updateProductAndListingSchema));
 
-export const updateProductPrice = server$(async function (
-  id: number,
-  newPrice: number,
-) {
-  const { db } = await createClient(this);
-
-  const session = getSession(this);
+export const useUpdateProduct = globalAction$(async function (data, req) {
+  const { db } = await createClient(req);
+  const session = getSession(req);
   if (!session) {
-    //   return serverError(this, "Anonymous creation is not implemented yet", 403);
-    console.log("Error");
+    console.log("Error occured");
   }
-
   await db
     .update(product)
-    .set({ price: newPrice })
-    .where(eq(product.id, id))
-    .where(eq(product.author, session!.user.id))
-    .execute();
-});
-export const updateProductDescription = server$(async function (
-  id: number,
-  newDescription: string,
-) {
-  const { db } = await createClient(this);
+    .set({
+      title: data.title,
+      price: data.price,
+      description: data.description,
+    })
+    .where(and(eq(product.id, data.id), eq(product.author, session!.user.id)));
+}, zod$(updateProductAndListingSchema));
 
-  const session = getSession(this);
-  if (!session) {
-    //   return serverError(this, "Anonymous creation is not implemented yet", 403);
-    console.log("Error");
-  }
-
-  await db
-    .update(product)
-    .set({ description: newDescription })
-    .where(eq(product.id, id))
-    .where(eq(product.author, session!.user.id))
-    .execute();
-});
-
+// Delete queries
 export const useDeleteProduct = globalAction$(async function (data, req) {
   const { db } = await createClient(req);
   const session = getSession(req);
@@ -211,7 +185,7 @@ export const useDeleteProduct = globalAction$(async function (data, req) {
   await db
     .delete(product)
     .where(and(eq(product.id, data.id), eq(product.author, session!.user.id)));
-}, zod$(deleteProductSchema));
+}, zod$(deleteProductAndListingSchema));
 
 export const useDeleteListing = globalAction$(async function (data, req) {
   const { db } = await createClient(req);
@@ -224,4 +198,4 @@ export const useDeleteListing = globalAction$(async function (data, req) {
     .where(
       and(eq(listing.id, data.id), eq(listing.authorId, session!.user.id)),
     );
-}, zod$(deleteListingSchema));
+}, zod$(deleteProductAndListingSchema));

@@ -14,6 +14,7 @@ export const useGetUserListings = routeLoader$(async (req) => {
 });
 
 export default component$(() => {
+  // const useUpdateListing = useUpdateListing()
   const deleteListing = useDeleteListing();
   const userListings = useGetUserListings();
   const isOpen = useSignal(false);

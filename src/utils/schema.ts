@@ -1,4 +1,10 @@
 import { z } from "@builder.io/qwik-city";
 
-export const deleteProductSchema = z.object({ id: z.number() });
-export const deleteListingSchema = z.object({ id: z.number() });
+export const deleteProductAndListingSchema = z.object({ id: z.number() });
+
+export const updateProductAndListingSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  price: z.number(),
+  description: z.string(),
+});

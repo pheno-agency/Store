@@ -4,12 +4,7 @@ import { productSchema } from "./schema";
 import { type z } from "@builder.io/qwik-city";
 import coverImg from "../../media/cover-img.png";
 import { Image } from "@unpic/qwik";
-import {
-  useDeleteProduct,
-  updateProductDescription,
-  updateProductPrice,
-  updateProductTitle,
-} from "../../services/listing";
+import { useDeleteProduct, useUpdateProduct } from "../../services/listing";
 
 interface EditableProductProps {
   title?: string;
@@ -20,6 +15,7 @@ interface EditableProductProps {
 const EditableProduct = component$(
   ({ title, description, price, productId }: EditableProductProps) => {
     const deleteProduct = useDeleteProduct();
+    const updateProduct = useUpdateProduct();
     type productInfo = z.infer<typeof productSchema>;
     const [, { Form, Field }] = useForm<productInfo>({
       loader: {
@@ -33,9 +29,12 @@ const EditableProduct = component$(
     });
     const updateProductHandler: QRL<SubmitHandler<productInfo>> = $(
       async (values) => {
-        await updateProductTitle(productId, values.title);
-        await updateProductPrice(productId, values.price);
-        await updateProductDescription(productId, values.description);
+        await updateProduct.submit({
+          id: productId,
+          title: values.title,
+          price: values.price,
+          description: values.description,
+        });
       },
     );
     return (
