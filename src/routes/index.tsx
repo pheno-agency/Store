@@ -1,12 +1,17 @@
 import { component$ } from "@builder.io/qwik";
-import type { DocumentHead } from "@builder.io/qwik-city";
+import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import ListingCard from "~/components/cards/ListingCard";
-
+import { getListings } from "../services/listing";
+export const useGetListings = routeLoader$(async () => {
+  return getListings();
+});
 export default component$(() => {
+  const listings = useGetListings();
+
   return (
     <div class="flex flex-wrap justify-center items-center gap-4 p-20px mx-auto w-full">
-      {[1, 2, 3, 4, 5].map((el, i) => {
-        return <ListingCard key={i} title="sdgffdsfgds" seller="dfdsf" />;
+      {listings.value?.map((el, i) => {
+        return <ListingCard key={i} title={el.title} id={el.id} />;
       })}
     </div>
   );

@@ -121,6 +121,7 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
               name: selectedUser.name,
             };
           } catch (err: unknown) {
+            console.error(err);
             const isAuthError = err instanceof AuthError;
             if (err instanceof Error) {
               const url = new URL(req.url);
