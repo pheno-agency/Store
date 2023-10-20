@@ -40,7 +40,7 @@ const Signup = component$(() => {
   );
 
   const showPassword = useSignal(false);
-  const passwordVisiblityHandler = $(() => {
+  const passwordVisibilityHandler = $(() => {
     showPassword.value = !showPassword.value;
   });
 
@@ -115,7 +115,7 @@ const Signup = component$(() => {
               />
               <button
                 type="button"
-                onClick$={passwordVisiblityHandler}
+                onClick$={passwordVisibilityHandler}
                 class="h-4 bg-#fff border-none absolute right-2.5 cursor-pointer"
               >
                 {showPassword.value ? (

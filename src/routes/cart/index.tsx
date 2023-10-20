@@ -18,7 +18,6 @@ export default component$(() => {
         .filter(async (p) => Boolean(await p)) ?? [],
     );
   });
-
   return (
     <div class="flex flex-col items-center justify-between">
       <Resource
