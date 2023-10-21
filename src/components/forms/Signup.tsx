@@ -14,6 +14,7 @@ import EmailIcon from "~/media/icons/email.svg";
 import InVisibleIcon from "~/media/icons/eye-off.svg";
 import VisibleIcon from "~/media/icons/eye-on.svg";
 import { useAuthSignin } from "~/routes/plugin@auth";
+import ButtonLoader from "../ButtonLoader";
 
 type LoginForm = z.infer<typeof signupSchema>;
 const Signup = component$(() => {
@@ -35,12 +36,18 @@ const Signup = component$(() => {
     async (credentials) =>
       await signin.submit({
         providerId: "credentials",
-        options: { callbackUrl: "/", ...credentials },
+        options: {
+          callbackUrl:
+            location.prevUrl?.pathname === "/register/"
+              ? "/"
+              : location.prevUrl?.pathname,
+          ...credentials,
+        },
       }),
   );
 
   const showPassword = useSignal(false);
-  const passwordVisiblityHandler = $(() => {
+  const passwordVisibilityHandler = $(() => {
     showPassword.value = !showPassword.value;
   });
 
@@ -50,7 +57,7 @@ const Signup = component$(() => {
     "w-60 h-8 border-0.5 border-solid border-red-300 rounded-2 text-2.75 placeholder:font-Poppins placeholder:text-2.75 pl-3 focus:border-0.5 focus-border-solid focus:border-#DE4242 focus:outline-none";
 
   const submitButtonBaseStyle =
-    "w-59.5 h-8 !bg-gradient-to-r !from-#1E18CF !from-50% !to-#625DDD !to-100% !text-#fff border-none rounded-2 text-3 font-normal cursor-pointer duration-150";
+    "relative w-59.5 h-8 !bg-gradient-to-r !from-#1E18CF !from-50% !to-#625DDD !to-100% !text-#fff border-none rounded-2 text-3 font-normal cursor-pointer duration-150";
 
   return (
     <Form onSubmit$={submitHandler} class="flex flex-col items-center gap-5">
@@ -115,7 +122,7 @@ const Signup = component$(() => {
               />
               <button
                 type="button"
-                onClick$={passwordVisiblityHandler}
+                onClick$={passwordVisibilityHandler}
                 class="h-4 bg-#fff border-none absolute right-2.5 cursor-pointer"
               >
                 {showPassword.value ? (
@@ -157,7 +164,7 @@ const Signup = component$(() => {
                   }
                 />
                 <p class="text-3 text-#3A3A3A leading-0">
-                  Agree to the terms & privcy
+                  Agree to the terms & privacy
                 </p>
               </div>
               {field.error && (
@@ -182,7 +189,7 @@ const Signup = component$(() => {
           }`}
           disabled={isActiveSubmitButton.value}
         >
-          Sign up
+          {signin.isRunning ? <ButtonLoader /> : "Sign up"}
         </button>
       </div>
     </Form>

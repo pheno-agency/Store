@@ -1,24 +1,24 @@
 import { Resource, component$, useResource$ } from "@builder.io/qwik";
-import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
+import { useNavigate, type DocumentHead } from "@builder.io/qwik-city";
 import ProductCard from "~/components/cards/ProductCard";
 import { getListingProducts } from "../../services/listing";
-import { getUserCartItems } from "../../services/cart";
-export const useGetUserCartItem = routeLoader$((req) => {
-  return getUserCartItems.apply(req);
-});
+import { useGetUserCartItem } from "../layout";
+import { useCheckout } from "~/services/cart";
+
 export default component$(() => {
   const userCartItems = useGetUserCartItem();
+  const checkout = useCheckout();
+  const nav = useNavigate();
   const listingsResource = useResource$(() => {
     return Promise.all(
       userCartItems.value
-        ?.map(async ({ listing }) => ({
+        .map(async ({ listing }) => ({
           title: listing.title,
           products: await getListingProducts(listing.id),
         }))
         .filter(async (p) => Boolean(await p)) ?? [],
     );
   });
-
   return (
     <div class="flex flex-col items-center justify-between">
       <Resource
@@ -57,12 +57,15 @@ export default component$(() => {
                     )
                     .toFixed(3)}
                 </p>
-                <a
-                  class="w-80px h-32px flex justify-center items-center text-black bg-white border border-solid rounded-8px"
-                  href="/"
+                <button
+                  class="w-80px h-32px flex justify-center items-center text-black bg-white border border-solid rounded-8px cursor-pointer"
+                  onClick$={async () => {
+                    await checkout.submit();
+                    nav("/");
+                  }}
                 >
                   checkout
-                </a>
+                </button>
               </div>
             </>
           ) : (

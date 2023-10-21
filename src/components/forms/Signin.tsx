@@ -14,6 +14,7 @@ import VisibleIcon from "~/media/icons/eye-on.svg";
 import InVisibleIcon from "~/media/icons/eye-off.svg";
 import EmailIcon from "~/media/icons/email.svg";
 import { useAuthSignin } from "~/routes/plugin@auth";
+import ButtonLoader from "../ButtonLoader";
 
 type LoginForm = z.infer<typeof signinSchema>;
 
@@ -32,15 +33,21 @@ const Signin = component$(() => {
   });
 
   const submitHandler: QRL<SubmitHandler<LoginForm>> = $(
-    async (credentials) =>
+    async (credentials) => {
       await signin.submit({
         providerId: "credentials",
-        options: { callbackUrl: "/", ...credentials },
-      }),
+        options: {
+          callbackUrl:
+            location.prevUrl?.pathname === "/register/"
+              ? "/"
+              : location.prevUrl?.pathname,
+          ...credentials,
+        },
+      });
+    },
   );
-
   const showPassword = useSignal(false);
-  const passwordVisiblityHandler = $(() => {
+  const passwordVisibilityHandler = $(() => {
     showPassword.value = !showPassword.value;
   });
 
@@ -72,7 +79,7 @@ const Signin = component$(() => {
             </div>
             {field.error ? (
               <Error class="-mt-1">
-                <p q:slot="errorText">{field.error}</p>
+                <p q: slot="errorText">{field.error}</p>
               </Error>
             ) : null}
           </div>
@@ -92,7 +99,7 @@ const Signin = component$(() => {
               />
               <button
                 type="button"
-                onClick$={passwordVisiblityHandler}
+                onClick$={passwordVisibilityHandler}
                 class="h-4 bg-#fff border-none absolute right-2.5 cursor-pointer unselectable "
               >
                 {showPassword.value ? (
@@ -114,13 +121,13 @@ const Signin = component$(() => {
             </div>
             {field.error ? (
               <Error class="-mt-1">
-                <p q:slot="errorText">{field.error}</p>
+                <p q: slot="errorText">{field.error}</p>
               </Error>
             ) : null}
 
             {!field.error && serverErrorMessage && (
               <Error class="-mt-1">
-                <p q:slot="errorText">{serverErrorMessage}</p>
+                <p q: slot="errorText">{serverErrorMessage}</p>
               </Error>
             )}
           </div>
@@ -130,9 +137,9 @@ const Signin = component$(() => {
       {/* submit button */}
       <button
         type="submit"
-        class="w-59.5 h-8 font-Poppins !bg-gradient-to-r !from-#1E18CF !from-50% !to-#625DDD !to-100% !text-#fff border-none rounded-2 text-3 font-normal unselectable cursor-pointer"
+        class="relative w-59.5 h-8 font-Poppins !bg-gradient-to-r !from-#1E18CF !from-50% !to-#625DDD !to-100% !text-#fff border-none rounded-2 text-3 font-normal unselectable cursor-pointer"
       >
-        Continue
+        {signin.isRunning ? <ButtonLoader /> : "Continue"}
       </button>
 
       <div class="flex items-center">

@@ -3,7 +3,7 @@ import { and, eq } from "drizzle-orm";
 import { cartItem } from "~/db/schema/cartItem";
 import { createClient } from "~/db/schema/utils";
 import { getSession } from "~/routes/plugin@auth";
-import { addToCartSchema } from "~/utils/schema";
+import { addToCartSchema, deleteFromCartSchema } from "~/utils/schema";
 
 export const useAddToCart = globalAction$(async function (data, req) {
   const { db } = await createClient(req);
@@ -38,8 +38,7 @@ export const getUserCartItems = server$(async function () {
   const { db } = await createClient(this);
   const session = getSession(this);
   if (!session) {
-    console.log("Error occurred");
-    return;
+    return [];
   }
   return await db.query.cartItem
     .findMany({
@@ -49,4 +48,29 @@ export const getUserCartItems = server$(async function () {
       where: eq(cartItem.authorId, session.user.id),
     })
     .execute();
+});
+
+export const useDeleteFromCart = globalAction$(async function (data, req) {
+  const { db } = await createClient(req);
+  const session = getSession(req);
+  if (!session) {
+    console.log("ERROR");
+  }
+  await db
+    .delete(cartItem)
+    .where(
+      and(
+        eq(cartItem.listingId, data.listingId),
+        eq(cartItem.authorId, session!.user.id),
+      ),
+    );
+}, zod$(deleteFromCartSchema));
+
+export const useCheckout = globalAction$(async function (_, req) {
+  const { db } = await createClient(req);
+  const session = getSession(req);
+  if (!session) {
+    console.log("ERROR");
+  }
+  await db.delete(cartItem).where(eq(cartItem.authorId, session!.user.id));
 });
