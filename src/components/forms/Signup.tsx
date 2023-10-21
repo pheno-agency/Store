@@ -36,7 +36,7 @@ const Signup = component$(() => {
       await signin.submit({
         providerId: "credentials",
         options: { callbackUrl: "/", ...credentials },
-      }),
+      })
   );
 
   const showPassword = useSignal(false);
@@ -157,7 +157,7 @@ const Signup = component$(() => {
                   }
                 />
                 <p class="text-3 text-#3A3A3A leading-0">
-                  Agree to the terms & privcy
+                  Agree to the terms & privacy
                 </p>
               </div>
               {field.error && (
