@@ -15,3 +15,4 @@ export const updateListingSchema = z.object({
 export const addToCartSchema = z.object({
   listingId: z.number(),
 });
+export const deleteFromCartSchema = addToCartSchema;

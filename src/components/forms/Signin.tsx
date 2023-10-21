@@ -33,13 +33,19 @@ const Signin = component$(() => {
   });
 
   const submitHandler: QRL<SubmitHandler<LoginForm>> = $(
-    async (credentials) =>
+    async (credentials) => {
       await signin.submit({
         providerId: "credentials",
-        options: { callbackUrl: "/", ...credentials },
-      }),
+        options: {
+          callbackUrl:
+            location.prevUrl?.pathname === "/register/"
+              ? "/"
+              : location.prevUrl?.pathname,
+          ...credentials,
+        },
+      });
+    },
   );
-
   const showPassword = useSignal(false);
   const passwordVisibilityHandler = $(() => {
     showPassword.value = !showPassword.value;
@@ -73,7 +79,7 @@ const Signin = component$(() => {
             </div>
             {field.error ? (
               <Error class="-mt-1">
-                <p q:slot="errorText">{field.error}</p>
+                <p q: slot="errorText">{field.error}</p>
               </Error>
             ) : null}
           </div>
@@ -115,13 +121,13 @@ const Signin = component$(() => {
             </div>
             {field.error ? (
               <Error class="-mt-1">
-                <p q:slot="errorText">{field.error}</p>
+                <p q: slot="errorText">{field.error}</p>
               </Error>
             ) : null}
 
             {!field.error && serverErrorMessage && (
               <Error class="-mt-1">
-                <p q:slot="errorText">{serverErrorMessage}</p>
+                <p q: slot="errorText">{serverErrorMessage}</p>
               </Error>
             )}
           </div>

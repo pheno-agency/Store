@@ -36,7 +36,13 @@ const Signup = component$(() => {
     async (credentials) =>
       await signin.submit({
         providerId: "credentials",
-        options: { callbackUrl: "/", ...credentials },
+        options: {
+          callbackUrl:
+            location.prevUrl?.pathname === "/register/"
+              ? "/"
+              : location.prevUrl?.pathname,
+          ...credentials,
+        },
       }),
   );
 

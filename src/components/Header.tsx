@@ -7,15 +7,20 @@ import PlusIcon from "~/media/icons/plus-icon.svg";
 import { Link, useLocation } from "@builder.io/qwik-city";
 import { useAuthSession, useAuthSignout } from "~/routes/plugin@auth";
 import ButtonLoader from "./ButtonLoader";
+import { useGetUserCartItem } from "~/routes/layout";
 
 const header = component$(() => {
   const location = useLocation();
   const isAuthorized = useAuthSession();
   const signout = useAuthSignout();
-
+  const userCartItems = useGetUserCartItem();
   return (
     <header class="shadow-lg w-full h-20 flex justify-between items-center px-10">
-      <Link href="/" class="h-full flex justify-center items-center text-20px">
+      <Link
+        href="/"
+        prefetch
+        class="h-full flex justify-center items-center text-20px"
+      >
         {location.url.pathname === "/cart/" ||
         location.url.pathname === "/register/" ? (
           <Image src={BackIcon} alt="back icon" width={20} height={20} />
@@ -26,13 +31,19 @@ const header = component$(() => {
       <div class="flex gap-2 justify-center items-center">
         {isAuthorized.value?.user ? (
           <>
-            <Link href="/listings">
+            <Link href="/listings" prefetch>
               <Image src={PlusIcon} alt="cart icon" width={20} height={20} />
             </Link>
             <Link
               href="/cart"
+              prefetch
               class="relative h-full flex justify-center items-center mr-2"
             >
+              {userCartItems.value.length ? (
+                <p class="bg-red-500 rounded-full absolute -top-2 mt-0 -right-3 w-20px h-20px text-14px text-white flex justify-center items-center font-normal">
+                  {userCartItems.value.length}
+                </p>
+              ) : null}
               <Image src={CartIcon} alt="cart icon" width={20} height={20} />
             </Link>
             <button
@@ -45,6 +56,7 @@ const header = component$(() => {
         ) : location.url.pathname === "/register/" ? null : (
           <Link
             href="/register"
+            prefetch
             class="relative h-full flex justify-center items-center"
           >
             <Image src={UserIcon} alt="cart icon" width={20} height={20} />

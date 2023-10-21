@@ -47,7 +47,7 @@ export default component$(() => {
       >
         {isOpen.value ? "Cancel" : "New list"}
       </button>
-      {isOpen.value ? <CreateListing /> : null}
+      {isOpen.value ? <CreateListing isOpen={isOpen} /> : null}
       {userListings.value?.map((listing) => {
         return (
           <div
