@@ -1,5 +1,5 @@
 import { Resource, component$, useResource$ } from "@builder.io/qwik";
-import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
+import { routeLoader$, type DocumentHead, Link } from "@builder.io/qwik-city";
 import ProductCard from "~/components/cards/ProductCard";
 import { getListingProducts } from "../../services/listing";
 import { getUserCartItems } from "../../services/cart";
@@ -56,20 +56,20 @@ export default component$(() => {
                     )
                     .toFixed(3)}
                 </p>
-                <a
+                <Link
                   class="w-80px h-32px flex justify-center items-center text-black bg-white border border-solid rounded-8px"
                   href="/"
                 >
                   checkout
-                </a>
+                </Link>
               </div>
             </>
           ) : (
             <p class="text-25px text-black">
               You have no items in your shopping cart,
-              <a class="!text-red" href="/">
+              <Link class="!text-red" href="/">
                 start adding some
-              </a>
+              </Link>
               !
             </p>
           )

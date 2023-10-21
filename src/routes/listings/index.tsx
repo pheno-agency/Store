@@ -6,6 +6,7 @@ import {
   useNavigate,
 } from "@builder.io/qwik-city";
 import { useForm, zodForm$ } from "@modular-forms/qwik";
+import ButtonLoader from "~/components/ButtonLoader";
 import { listingSchema } from "~/components/forms/Schema";
 import CreateListing from "~/components/listing/CreateListing";
 import CreateProduct from "~/components/listing/CreateProduct";
@@ -76,15 +77,26 @@ export default component$(() => {
                     </div>
                   )}
                 </Field>
-                <div>
-                  <button type="submit">edit list</button>
+                <div class="flex items-center">
+                  <button type="submit" class="relative w-5rem h-1.5rem">
+                    {updateListing.isRunning ? (
+                      <ButtonLoader buttonLoaderStyles="![&>*]:bg-black" />
+                    ) : (
+                      "edit list"
+                    )}
+                  </button>
                   <button
                     onClick$={async () => {
                       await deleteListing.submit({ id: listing.id });
                       nav();
                     }}
+                    class="relative w-5rem h-1.5rem"
                   >
-                    delete list
+                    {deleteListing.isRunning ? (
+                      <ButtonLoader buttonLoaderStyles="![&>*]:bg-black" />
+                    ) : (
+                      "delete list"
+                    )}
                   </button>
                 </div>
               </div>

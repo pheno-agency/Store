@@ -6,6 +6,7 @@ import { type z } from "@builder.io/qwik-city";
 import coverImg from "../../media/cover-img.png";
 import { Image } from "@unpic/qwik";
 import { useCreateProduct } from "../../services/product";
+import ButtonLoader from "../ButtonLoader";
 
 interface CreateProductProps {
   id: number;
@@ -103,7 +104,13 @@ const CreateProduct = component$(
           </Field>
         </div>
         <div class="flex justify-center items-center gap-2">
-          <button type="submit">create</button>
+          <button type="submit" class="relative w-5rem h-1.5rem">
+            {createProduct.isRunning ? (
+              <ButtonLoader buttonLoaderStyles="![&>*]:bg-black" />
+            ) : (
+              "create"
+            )}
+          </button>
         </div>
       </Form>
     );

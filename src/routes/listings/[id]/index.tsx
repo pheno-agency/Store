@@ -4,6 +4,7 @@ import ProductCard from "~/components/cards/ProductCard";
 import { getListingProducts } from "~/services/listing";
 import { useAddToCart } from "~/services/cart";
 import { useAuthSession } from "~/routes/plugin@auth";
+import ButtonLoader from "~/components/ButtonLoader";
 
 export const useListingProducts = routeLoader$((req) => {
   return getListingProducts(Number(req.params.id));
@@ -35,9 +36,13 @@ export default component$(() => {
               ? addToCart.submit({ listingId: Number(location.params.id) })
               : nav("/register")
           }
-          class=" mr-4"
+          class="relative w-5.5rem h-1.5rem mr-4"
         >
-          add to cart
+          {addToCart.isRunning ? (
+            <ButtonLoader buttonLoaderStyles="![&>*]:bg-black" />
+          ) : (
+            "Add to cart"
+          )}
         </button>
       </div>
     </div>

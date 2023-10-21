@@ -14,6 +14,7 @@ import VisibleIcon from "~/media/icons/eye-on.svg";
 import InVisibleIcon from "~/media/icons/eye-off.svg";
 import EmailIcon from "~/media/icons/email.svg";
 import { useAuthSignin } from "~/routes/plugin@auth";
+import ButtonLoader from "../ButtonLoader";
 
 type LoginForm = z.infer<typeof signinSchema>;
 
@@ -130,9 +131,9 @@ const Signin = component$(() => {
       {/* submit button */}
       <button
         type="submit"
-        class="w-59.5 h-8 font-Poppins !bg-gradient-to-r !from-#1E18CF !from-50% !to-#625DDD !to-100% !text-#fff border-none rounded-2 text-3 font-normal unselectable cursor-pointer"
+        class="relative w-59.5 h-8 font-Poppins !bg-gradient-to-r !from-#1E18CF !from-50% !to-#625DDD !to-100% !text-#fff border-none rounded-2 text-3 font-normal unselectable cursor-pointer"
       >
-        Continue
+        {signin.isRunning ? <ButtonLoader /> : "Continue"}
       </button>
 
       <div class="flex items-center">
